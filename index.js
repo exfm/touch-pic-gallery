@@ -7,7 +7,7 @@ function TouchPicGallery(el, opts){
     this.el = $(el);
     
     this.childClass = 'pic';
-    this.childWidth = 350;
+    this.childWidth = this.childWidth;
     
     $.extend(this, opts);
     
@@ -67,7 +67,7 @@ TouchPicGallery.prototype.onTouchMove = function(e){
 TouchPicGallery.prototype.onTouchEnd = function(e){
     this.endTime = Date.now();
     var oldIndex = this.index;
-    this.index = Math.round(this.diff / 350);
+    this.index = Math.round(this.diff / this.childWidth);
     var momentum = (Math.abs(this.relativeDiff)) / (this.endTime - this.startTime);
     if(momentum > .3 && oldIndex === this.index){
         if(this.relativeDiff > 0){
@@ -86,14 +86,23 @@ TouchPicGallery.prototype.onTouchEnd = function(e){
         this.index = this.count;
     }
     this.el.addClass('animate');
-    this.el.on('webkitTransitionEnd', $.proxy(function(){
-        this.el.removeClass('animate');
-        this.el.removeClass('fast_animate');
-        this.diff = this.index * 350;
-    }, this));
+    this.el.on('webkitTransitionEnd', $.proxy(this.transtionEnd, this));
     webkitRequestAnimationFrame($.proxy(function(){
-        this.el.css('-webkit-transform', 'translate('+this.index * 350+'px, 0)');
+        this.el.css('-webkit-transform', 'translate('+this.index * this.childWidth+'px, 0)');
     }, this));
+}
+
+TouchPicGallery.prototype.transtionEnd = function(e){
+    this.el.off('webkitTransitionEnd');
+    this.el.removeClass('animate');
+    this.el.removeClass('fast_animate');
+    this.diff = this.index * this.childWidth;
+    this.el.trigger(
+        'notch',
+        {
+            'notch': Math.abs(this.index)
+        }
+    );
 }
 
 TouchPicGallery.prototype.requestTick = function() {
