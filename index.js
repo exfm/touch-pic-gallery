@@ -25,6 +25,7 @@ function TouchPicGallery(el, opts){
     
     this.setPositions();
     this.addListeners();
+    
 }
 
 TouchPicGallery.prototype.setPositions = function(){
@@ -51,15 +52,15 @@ TouchPicGallery.prototype.addListeners = function(){
 
 TouchPicGallery.prototype.onTouchStart = function(e){
     e.preventDefault();
-    this.start = e.originalEvent.pageX - this.diff; 
-    this.relativeStart = e.originalEvent.pageX;
+    this.start = e.pageX - this.diff; 
+    this.relativeStart = e.pageX;
     this.startTime = Date.now();
 };
 
 TouchPicGallery.prototype.onTouchMove = function(e){
     e.preventDefault();
-    this.diff = e.originalEvent.pageX - this.start;
-    this.relativeDiff = e.originalEvent.pageX - this.relativeStart;
+    this.diff = e.pageX - this.start;
+    this.relativeDiff = e.pageX - this.relativeStart;
     this.requestTick();
 }
 
@@ -91,7 +92,7 @@ TouchPicGallery.prototype.onTouchEnd = function(e){
         this.diff = this.index * 350;
     }, this));
     webkitRequestAnimationFrame($.proxy(function(){
-        this.el.css('webkit-transform', 'translate('+this.index * 350+'px, 0)');
+        this.el.css('-webkit-transform', 'translate('+this.index * 350+'px, 0)');
     }, this));
 }
 
@@ -104,7 +105,7 @@ TouchPicGallery.prototype.requestTick = function() {
 
 TouchPicGallery.prototype.update = function() {
     this.ticking = false;
-	this.el.css('webkit-transform', 'translate('+this.diff+'px, 0)');
+	this.el.css('-webkit-transform', 'translate('+this.diff+'px, 0)');
 }
 
 
