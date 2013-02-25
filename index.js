@@ -52,15 +52,15 @@ TouchPicGallery.prototype.addListeners = function(){
 
 TouchPicGallery.prototype.onTouchStart = function(e){
     e.preventDefault();
-    this.start = e.pageX - this.diff; 
-    this.relativeStart = e.pageX;
+    this.start = e.changedTouches[0].pageX - this.diff; 
+    this.relativeStart = e.changedTouches[0].pageX;
     this.startTime = Date.now();
 };
 
 TouchPicGallery.prototype.onTouchMove = function(e){
     e.preventDefault();
-    this.diff = e.pageX - this.start;
-    this.relativeDiff = e.pageX - this.relativeStart;
+    this.diff = e.changedTouches[0].pageX - this.start;
+    this.relativeDiff = e.changedTouches[0].pageX - this.relativeStart;
     this.requestAnimationFrame(this.update);
 }
 
